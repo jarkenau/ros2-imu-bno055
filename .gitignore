@@ -1,0 +1,15 @@
+# ROS2 
+install/
+log/
+build/
+
+# Colcon custom files
+COLCON_IGNORE
+AMENT_IGNORE
+
+# Vs-Code
+.vscode/ 
+
+# Python
+__pycache__/
+
