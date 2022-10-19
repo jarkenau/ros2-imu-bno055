@@ -1,0 +1,40 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # test on all current ROS2 distributions
+        ros_distribution: [foxy, galactic, humble]
+        include:
+          - docker_image: 'ubuntu:focal'
+            ros_distribution: foxy
+            ros_version: 2
+          - docker_image: 'ubuntu:focal'
+            ros_distribution: galactic
+            ros_version: 2
+          - docker_image: 'ubuntu:jammy'
+            ros_distribution: humble
+            ros_version: 2
+
+    container:
+      image: '${{ matrix.docker_image }}'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup ROS environment
+        uses: jarkenau/setup-ros@master
+        with:
+          required-ros-distributions: '${{ matrix.ros_distribution }}'
+
+      - name: build and test ROS 2
+        if: '${{ matrix.ros_version == 2 }}'
+        uses: ros-tooling/action-ros-ci@v0.2
+        with:
+          package-name: ros2_bno055_imu
+          target-ros2-distro: '${{ matrix.ros_distribution }}'
+          skip-tests: true
