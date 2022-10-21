@@ -102,7 +102,6 @@ void BNO055I2CDriver::init() {
 
 IMURecord BNO055I2CDriver::read() {
     IMURecord record;
-    unsigned char c = 0;
 
     // can only read a length of 0x20 at a time, so do it in 2 reads
     // BNO055_LINEAR_ACCEL_DATA_X_LSB_ADDR is the start of the data block that aligns with the IMURecord struct
