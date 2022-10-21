@@ -3,10 +3,17 @@
 Bno055I2cNode::Bno055I2cNode(const std::string& node_name)
     : Node(node_name)
 {
+    this->declare_parameter<std::string>("device");
+    this->declare_parameter<int>("address");
+    this->declare_parameter<std::string>("frame_id");
+
     imu_publisher_ = this->create_publisher<sensor_msgs::msg::Imu>("raw", 10);
     timer_ = this->create_wall_timer(1s, std::bind(&Bno055I2cNode::publish, this));
-    // TODO add device file and address via launch file
-    imu_ = std::make_unique<imu_bno055::BNO055I2CDriver>("/dev/i2c-3", 40);
+    
+    imu_ = std::make_unique<imu_bno055::BNO055I2CDriver>(
+        this->get_parameter("device").as_string(),
+        this->get_parameter("address").as_int()
+    );
     imu_->init();
 }
 
@@ -21,9 +28,8 @@ void Bno055I2cNode::publish()
     }
 
     sensor_msgs::msg::Imu msg_raw;
-    // TODO set frame via launch file
     msg_raw.header.stamp = this->get_clock()->now(); 
-    msg_raw.header.frame_id = "imu";
+    msg_raw.header.frame_id = this->get_parameter("frame_id").as_string();
     msg_raw.linear_acceleration.x = (double) record.raw_linear_acceleration_x / 100.0;
     msg_raw.linear_acceleration.y = (double) record.raw_linear_acceleration_y / 100.0;
     msg_raw.linear_acceleration.z = (double) record.raw_linear_acceleration_z / 100.0;
