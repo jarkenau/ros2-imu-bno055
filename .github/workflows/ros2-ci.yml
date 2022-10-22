@@ -8,11 +8,8 @@ jobs:
     strategy:
       matrix:
         # test on all current ROS2 distributions
-        ros_distribution: [foxy, galactic, humble]
+        ros_distribution: [galactic, humble]
         include:
-          - docker_image: 'ubuntu:focal'
-            ros_distribution: foxy
-            ros_version: 2
           - docker_image: 'ubuntu:focal'
             ros_distribution: galactic
             ros_version: 2
@@ -31,7 +28,7 @@ jobs:
         with:
           required-ros-distributions: '${{ matrix.ros_distribution }}'
 
-      - name: build and test ROS 2
+      - name: build on ROS 2
         if: '${{ matrix.ros_version == 2 }}'
         uses: ros-tooling/action-ros-ci@v0.2
         with:
