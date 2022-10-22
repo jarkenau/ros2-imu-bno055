@@ -12,7 +12,7 @@ def generate_launch_description():
             parameters=[
                 {
                     # default for software i2c on raspberry pi
-                    "device": "/dev/i2c-3",
+                    "device": "/dev/i2c-1",
                     # default i2c address of bno055 0x28 -> 40
                     "address": 40,
                     "frame_id": "imu"
