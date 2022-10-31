@@ -15,7 +15,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
-include_directories(include/bno055_imu/)
+include_directories(include/)
 
 add_executable(${PROJECT_NAME} 
   src/bno055_i2c_driver.cpp
